@@ -1,38 +1,32 @@
-const express = require ("express")
 const mysql = require ("mysql")
-
+const express = require ('express')
 // Connection of the DB
-const db = mysql.createConnection({
+var data = mysql.createConnection({
 
-    host :"127.0.0.1",
+    host :"localhost",
     user :"root",
-    password :"root",
-    port:'3306',
-
+    password :"root"
+    
 })
 
 // Connction
-db.connect((err)=>{
-    if(err) throw err;
+data.query(()=>{
     console.log("MySQL database Connected")
 });
 
-
 const app = express();
 
-app.get('/mydb' ,(req,res)=>{
-    db.query("CREATE DATABASE nodemysql",(err,result)=>{
-        if(err) throw err;
+app.listen(8000,()=>{
+    console.log("now listening to port http://localhost:8000")
+})
+
+let sql = 'CREATE DATABASE shopsql'
+
+app.get('/mydb',(req,res)=>{
+    data.query(sql,(result,err)=>{
+        if (err) throw err;
         console.log(result)
-        res.send("Connected db")
+        res.send("Created shop database in mysql")
     })
 })
-
-app.listen(8000,() =>{
-    console.log("App Listening to http://localhost:8000")
-})
-
-
-
-module.exports = db;
 
